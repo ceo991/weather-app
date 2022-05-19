@@ -1,0 +1,56 @@
+.favorite{
+    background-color: aliceblue;
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    font-size: 8px;
+    height: 250px;
+    width: 200px;
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+    border-radius:15px;
+    cursor: pointer;
+}
+
+.fav-holder{
+    width: 200px;
+    height: 640px;
+    /* overflow: hidden; */
+}
+
+.delete-btn{
+    border:none;
+    border-radius: 50%;
+    background-color: rgb(231, 129, 129);
+    width: 40px;
+    height: 40px;
+    margin-bottom: 20px;
+}
+
+@media (max-width:900px) {
+    .favorite{
+        background-color: aliceblue;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100px;
+        width: 70px;
+        border: 1px solid black;
+        border-radius:15px;
+        font-size:6px;
+        margin-bottom: 30px;
+    }
+    
+    .fav-holder{
+        display: flex;
+        flex-direction: row;
+        gap:30px;
+        width: 100vw;
+        height: 120px;
+        overflow: hidden;
+    
+    }
+}
