@@ -242,8 +242,8 @@ function updateWidth(){
       <div className="App-header">
         {
           favorite.length > 0  &&
-            <div className={width <= 900 ?"fav-holder":"fav-holder-used"}>
-              <div  className="flex-dir">
+            <div  className={width <= 900 ?"fav-holder":"fav-holder-used"}>
+              <div ref={carouselRef}  className="flex-dir">
                   {fav}
               </div>
             </div>
