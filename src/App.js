@@ -244,13 +244,15 @@ useEffect(() =>{
       paddingRight: (hideUI && width <= 900) ?   "15px" :"",
     }
     
+    const holderStyle = {marginBottom:"25px"}
+
     return weather !== null ?
      (
        
       <div className="App-header">
         {
           favorite.length > 0  &&
-            <div ref={outerRef} className={width <= 900 ?"fav-holder":"fav-holder-used"}>
+            <div ref={outerRef}  className={width <= 900 ?"fav-holder":"fav-holder-used"} style={holderStyle}>
               <div ref={carouselRef} style={style}  className="flex-dir">
                   {fav}
               </div>
@@ -291,27 +293,23 @@ useEffect(() =>{
     );
   }
 
-  // let overFlowProperty = width<=900 ? "overflowX: scroll":"overflow: hidden"
-  // let overFlowValue = !hideUI ? "scroll" : "hide"
-
   const style={
     display: !hideUI? "flex" : "",
     flexDirection: !hideUI? "row" : "",
     gap: !hideUI ? "10px" : "",
     paddingRight: (!hideUI ) ?   "15px" :"",
-    // width: !hideUI ? "1620px"  :"",
-    // height: !hideUI ? "" : "",
-    // transform: !hideUI ? `translateX(${(((width <= 900?102:232)*favorite.length+10*favorite.length-(width <= 900?width:600))/2)+10}px)` : "",
+
     transform: (!hideUI&&screenInfo) ? `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)` : "",
-    // overFlowProperty
 }
+
+  const formStyle= (hideUI) ? {margin: (width <= 900) ? "25px" : "25px 0 25px 0"} :{margin: (width > 900) ? "" : "25px"}
 
   return (
     <div className="App">
-    <form onSubmit={handleLocation}>
-      <label htmlFor="location">Enter A Location:</label>
+    <form onSubmit={handleLocation} style={formStyle}>
+      <label htmlFor="location">Enter A Location : </label>
       <input type="text" name="location" id="location" ref={locationRef} required />
-      <button type='submit'>Submit</button>
+      <button type='submit' id='submit'>Submit</button>
     </form>
       {(favorite.length>0 && !hideUI) &&       
          <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"}>
