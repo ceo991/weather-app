@@ -91,7 +91,15 @@ useEffect(() =>{
         setWeather(null)
         setLocation("")
         setHideUI(false)
-        setIsDragging(false)  
+        setIsDragging(false)
+        if((carouselRef.current && outerRef.current)){
+          setScreenInfo({carouselWidth: carouselRef.current.scrollWidth  ,
+                          outerWidth: outerRef.current.offsetWidth,
+                          carouselHeight: carouselRef.current.scrollHeight,
+                          outerHeight: outerRef.current.offsetHeight
+                        })
+                        // console.log(carouselRef.current.scrollHeight,outerRef.current.offsetHeight)
+        }  
       }
     );
   }
