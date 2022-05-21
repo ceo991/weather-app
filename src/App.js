@@ -64,6 +64,8 @@ useEffect(() => {
                     outerHeight: outerRef.current.offsetHeight
                   })
     setRenderCount(prev => prev+1 )
+  }else{
+    return false
   }
 })
 
