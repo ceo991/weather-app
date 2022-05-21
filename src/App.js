@@ -304,8 +304,13 @@ useEffect(() =>{
 
   const formStyle= (hideUI) ? {margin: (width <= 900) ? "25px" : "25px 0 25px 0"} :{margin: (width > 900) ? "" : "25px"}
 
+  const variants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  }
   return (
-    <div className="App">
+    <motion.div className="App" initial="hidden" animate="visible" variants={variants}>
+    <h1 className='title'>Weather App</h1>
     <form onSubmit={handleLocation} style={formStyle}>
       <label htmlFor="location">Enter A Location : </label>
       <input type="text" name="location" id="location" ref={locationRef} required />
@@ -319,7 +324,7 @@ useEffect(() =>{
          </div>
        }
       {location.length>0 && weatherElements()}
-    </div>
+    </motion.div>
   );
 }
 

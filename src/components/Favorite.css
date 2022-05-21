@@ -1,5 +1,6 @@
 .favorite{
-    background-color: aliceblue;
+    color: ivory;
+    background-color: #212381;
     margin: 0;
     padding: 15px;
     display: flex;
@@ -32,7 +33,7 @@
 
 @media (max-width:900px) {
     .favorite{
-        background-color: aliceblue;
+        background-color: #3235be;
         margin: 0;
         padding: 0;
         display: flex;
