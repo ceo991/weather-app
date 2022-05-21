@@ -7,14 +7,12 @@
     font-size: 8px;
     height: 250px;
     width: 200px;
-    border: 1px solid black;
+    border: none;
     justify-content: center;
     align-items: center;
     border-radius:15px;
     cursor: pointer;
-    -moz-box-shadow:    3px 3px 5px 6px #ccc;
-    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-    box-shadow:         3px 3px 5px 6px #ccc;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
 .fav-holder{
@@ -25,7 +23,7 @@
 
 .delete-btn{
     border:none;
-    border-radius: 50%;
+    border-radius: 20px;
     background-color: rgb(231, 129, 129);
     width: 40px;
     height: 40px;
@@ -41,13 +39,11 @@
         flex-direction: column;
         height: 100px;
         width: 70px;
-        border: 1px solid black;
+        border: none;
         border-radius:15px;
         font-size:6px;
         margin-bottom: 30px;
-        -moz-box-shadow:    3px 3px 5px 6px #ccc;
-        -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-        box-shadow:         3px 3px 5px 6px #ccc;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
     }
     
     .fav-holder{
@@ -58,5 +54,13 @@
         height: 120px;
         overflow: hidden;
     
+    }
+    .delete-btn{
+        border:none;
+        border-radius: 20px;
+        background-color: rgb(231, 129, 129);
+        width: 40px;
+        height: 40px;
+        margin-bottom: 20px;
     }
 }
