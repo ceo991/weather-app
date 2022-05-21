@@ -10,28 +10,27 @@ function App() {
   const[lat,setLat]=useState(0);
   const[width,setWidth]=useState(window.innerWidth);
   const[location,setLocation]=useState("");
-  const[dragDirection,setDragDirection]=useState("x");
   const[weather,setWeather] = useState(null);
   const[favorite,setFavorite] = useState([]);
   const[hideUI,setHideUI] = useState(false);
   const[isDragging,setIsDragging] = useState(false);
+  const[renderCount,setRenderCount] = useState(0);
+  const[screenInfo,setScreenInfo] = useState({});
   const locationRef = useRef("");
   const carouselRef = useRef();
+  const outerRef = useRef();
   const Weather_Key="FAV_WEATHER";
-  //let favWeather = undefined;
 
 useEffect(()=>{
   window.addEventListener("resize",()=>{setWidth(window.innerWidth);})
+
   let favWeather = JSON.parse(localStorage.getItem(Weather_Key));
   console.log(favWeather)
   if(favWeather.length>0){
     favWeather.map((fav)=>{
        fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
         .then( res => res.json()).then(data=>{
-          // console.log(data.main);
-          // console.log(data.wind);
-          //  console.log(data);
-          //setLocation(fav.location)
+
           const weatherData = {
             location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
             temp:data.main.temp,
@@ -41,21 +40,45 @@ useEffect(()=>{
             latitude:data.coord.lat,
             id:data.name.concat(data.sys.country)
           }
-          //setWeatherSimple(weatherData);
+
            setFavorite(prevFav=>{         
                 let arr = [...prevFav,weatherData]
                 let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
                 return [...uniqArr]
               });
           });
-      
     })
     
   }
+  
   return () => {
     window.removeEventListener("resize",()=>{setWidth(window.innerWidth);})
   }
 },[])
+
+useEffect(() => {
+  if((carouselRef.current && outerRef.current && renderCount <= 70)){
+    setScreenInfo({carouselWidth: carouselRef.current.scrollWidth  ,
+                    outerWidth: outerRef.current.offsetWidth,
+                    carouselHeight: carouselRef.current.scrollHeight,
+                    outerHeight: outerRef.current.offsetHeight
+                  })
+    setRenderCount(prev => prev+1 )
+  }
+})
+
+useEffect(() => {
+
+  if((carouselRef.current && outerRef.current)){
+    setScreenInfo({carouselWidth: carouselRef.current.scrollWidth  ,
+                    outerWidth: outerRef.current.offsetWidth,
+                    carouselHeight: carouselRef.current.scrollHeight,
+                    outerHeight: outerRef.current.offsetHeight
+                  })
+                  // console.log(carouselRef.current.scrollHeight,outerRef.current.offsetHeight)
+  }
+},[width,weather,favorite])
+
 
 useEffect(() =>{
   if(location.length>0){
@@ -85,9 +108,7 @@ useEffect(() =>{
     setWeather(null)
     fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
     .then(res => res.json()).then(data=>{
-      // console.log(data.main);
-      // console.log(data.wind);
-      //console.log(data);
+
       const weatherData = {
         location:location[0].toUpperCase().concat(location.slice(1,location.length).toLocaleLowerCase()),
         country:data.sys.country,
@@ -106,30 +127,10 @@ useEffect(() =>{
         id:data.name.concat(data.sys.country)
       }
       setWeather(weatherData);
+
     });
   }
 },[lon])
-
-// useLayoutEffect(() =>{
-//   setWidth(window.innerWidth)
-// })
-
-useEffect(() => {
-  //setWidth(window.innerWidth)
-  // console.log(width)
-  // updateDragDirection(width)
-  if(carouselRef.current){
-    console.log(carouselRef.current.scrollWidth)
-  }
-})
-
-function updateDragDirection(w){
-  w <= 900 ? setDragDirection("x"): setDragDirection("y")
-}
-
-function updateWidth(){
-  setWidth(window.innerWidth)
-}
 
   function handleLocation(e){
     e.preventDefault();
@@ -139,10 +140,6 @@ function updateWidth(){
   
           fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
           .then(res => res.json()).then(data=>{
-            // console.log(data.main);
-            // console.log(data.wind);
-            // console.log(data);
-            //setLocation(fav.location)
             const weatherData = {
               location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
               temp:data.main.temp,
@@ -152,7 +149,7 @@ function updateWidth(){
               latitude:data.coord.lat,
               id:data.name.concat(data.sys.country)
             }
-            //setWeatherSimple(weatherData);
+
             setFavorite(prevFav=>{         
                   let arr = [...prevFav,weatherData]
                   let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
@@ -175,10 +172,6 @@ function updateWidth(){
   
           fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
           .then(res => res.json()).then(data=>{
-            // console.log(data.main);
-            // console.log(data.wind);
-            // console.log(data);
-            //setLocation(fav.location)
             const weatherData = {
               location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
               temp:data.main.temp,
@@ -188,7 +181,7 @@ function updateWidth(){
               latitude:data.coord.lat,
               id:data.name.concat(data.sys.country)
             }
-            //setWeatherSimple(weatherData);
+
             setFavorite(prevFav=>{         
                   let arr = [...prevFav,weatherData]
                   let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
@@ -235,6 +228,11 @@ function updateWidth(){
       visible: { scale: 1 },
     }
     
+    const style={
+      transform: (hideUI&&screenInfo) ?( width >= 900 ? `translateY(${((screenInfo.carouselHeight-screenInfo.outerHeight)/2)+15}px)` : `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)`):"",
+      paddingBottom: (hideUI && width >= 900) ?   "15px" :"",
+      paddingRight: (hideUI && width <= 900) ?   "15px" :"",
+    }
     
     return weather !== null ?
      (
@@ -242,8 +240,8 @@ function updateWidth(){
       <div className="App-header">
         {
           favorite.length > 0  &&
-            <div  className={width <= 900 ?"fav-holder":"fav-holder-used"}>
-              <div ref={carouselRef}  className="flex-dir">
+            <div ref={outerRef} className={width <= 900 ?"fav-holder":"fav-holder-used"}>
+              <div ref={carouselRef} style={style}  className="flex-dir">
                   {fav}
               </div>
             </div>
@@ -290,10 +288,11 @@ function updateWidth(){
     display: !hideUI? "flex" : "",
     flexDirection: !hideUI? "row" : "",
     gap: !hideUI ? "10px" : "",
+    paddingRight: (!hideUI ) ?   "15px" :"",
     // width: !hideUI ? "1620px"  :"",
     // height: !hideUI ? "" : "",
     // transform: !hideUI ? `translateX(${(((width <= 900?102:232)*favorite.length+10*favorite.length-(width <= 900?width:600))/2)+10}px)` : "",
-    transform: !hideUI ? `translateX(${(((width <= 900?102:232)*favorite.length+10*favorite.length-(width <= 900?width:600))/2)+10}px)` : "",
+    transform: (!hideUI&&screenInfo) ? `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)` : "",
     // overFlowProperty
 }
 
@@ -305,7 +304,7 @@ function updateWidth(){
       <button type='submit'>Submit</button>
     </form>
       {(favorite.length>0 && !hideUI) &&       
-         <div  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"}>
+         <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"}>
            <div ref={carouselRef} className="flex-dir" style={style}>
             {fav}
            </div>
