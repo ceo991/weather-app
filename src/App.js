@@ -237,8 +237,8 @@ useEffect(() =>{
     }
     
     const style={
-      transform: (hideUI&&screenInfo) ?( width >= 900 ? `translateY(${((screenInfo.carouselHeight-screenInfo.outerHeight)/2)+15}px)` : `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)`):"",
-      paddingBottom: (hideUI && width >= 900) ?   "15px" :"",
+      transform: (hideUI&&screenInfo) ?( width > 900 ? `translateY(${((screenInfo.carouselHeight-screenInfo.outerHeight)/2)+15}px)` : `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)`):"",
+      paddingBottom: (hideUI && width > 900) ?   "15px" :"",
       paddingRight: (hideUI && width <= 900) ?   "15px" :"",
     }
     
