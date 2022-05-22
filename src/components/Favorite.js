@@ -1,17 +1,17 @@
 import { motion } from "framer-motion";
 import "./Favorite.css";
 
-function Weather(props) {
+function Weather({index,location,setFav,temp,icon,deleteFav}) {
   return (
-      <div className="favorite" onClick={() => props.setFav(props.index)}>
-        <h1>{props.location}</h1>
+      <div className="favorite" onClick={() => setFav(index)}>
+        <h1>{location}</h1>
         <h1>
-          <span>{Math.round(props.temp).toString()} &#8451;</span>
+          <span>{Math.round(temp).toString()} &#8451;</span>
         </h1>
-        <img src={props.icon} alt="" />
+        <img src={icon} alt="" />
         <button
           className="delete-btn"
-          onClick={(e) => props.deleteFav(e, props.index)}
+          onClick={(e) => deleteFav(e, index)}
         >
           X
         </button>

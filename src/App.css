@@ -113,9 +113,14 @@ h2{
 }
 
 .add-fav-button{
+  border: none;
+  background: transparent;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
+
+
 .flex-dir{
   border-radius: 25px;
   /* background-color: red; */

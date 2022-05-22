@@ -1,8 +1,11 @@
-import React,{useState,useEffect,useRef,useLayoutEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import Favorite from './components/Favorite'
 import { motion } from "framer-motion"
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' 
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
 
@@ -280,9 +283,8 @@ useEffect(() =>{
           <h4><span>{weather.weatherDescription}</span></h4>
           <img src={weather.weatherIcon} alt="" />
           <hr/>
-          <button className='add-fav-button' onClick={addToFavorites}>Add To Favorites</button>
+          <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color='#f5aa1f'/></button>
         </motion.div>
-        
       </div>
      )
     : 
