@@ -5,7 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' 
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faCloudSun, faHeart, faL, faMountainSun, faSun } from '@fortawesome/free-solid-svg-icons';
+import 'animate.css';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
   const[favorite,setFavorite] = useState([]);
   const[hideUI,setHideUI] = useState(false);
   const[isDragging,setIsDragging] = useState(false);
+  const[playAnim,setPlayAnim] = useState(false);
   const[renderCount,setRenderCount] = useState(0);
   const[screenInfo,setScreenInfo] = useState({});
   const locationRef = useRef("");
@@ -208,14 +210,18 @@ useEffect(() =>{
 
   function addToFavorites(){
     if(favorite.length>=10){
-      alert("maximum 10 favorites are allowed")
+      //alert("maximum 10 favorites are allowed")
       return
     }
     setFavorite(prevFav=>{         
       let arr = [...prevFav,weather]
       let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
+      setPlayAnim(true)
       return [...uniqArr]
     });
+    setTimeout(()=>{
+      setPlayAnim(false)
+    },3000)
   }
 
   function deleteFavorite(e,index){
@@ -283,7 +289,7 @@ useEffect(() =>{
           <h4><span>{weather.weatherDescription}</span></h4>
           <img src={weather.weatherIcon} alt="" />
           <hr/>
-          <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color='#f5aa1f'/></button>
+          <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color={favorite.length>=10 ? "darkgrey" : '#f5aa1f'} className={playAnim?'animate__animated animate__tada':""}/></button>
         </motion.div>
       </div>
      )
@@ -312,7 +318,7 @@ useEffect(() =>{
   }
   return (
     <motion.div className="App" initial="hidden" animate="visible" variants={variants}>
-    <h1 className='title'>Weather App</h1>
+    <h1 className='title'><FontAwesomeIcon icon={faCloudSun} color={'#f5aa1f'}/> Weather App </h1>
     <form onSubmit={handleLocation} style={formStyle}>
       <label htmlFor="location">Enter A Location : </label>
       <input type="text" name="location" id="location" ref={locationRef} required />
