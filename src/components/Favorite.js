@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import "./Favorite.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 function Weather({index,location,setFav,temp,icon,deleteFav}) {
   return (
@@ -13,7 +15,7 @@ function Weather({index,location,setFav,temp,icon,deleteFav}) {
           className="delete-btn"
           onClick={(e) => deleteFav(e, index)}
         >
-          X
+         <FontAwesomeIcon icon={faTrashCan} size="2x" color={'#e78181'} />
         </button>
       </div>
   );
