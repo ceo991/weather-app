@@ -4,8 +4,7 @@ import { motion } from "framer-motion"
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro' 
-import { faCloudSun, faHeart, faL, faMountainSun, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faCloudSun, faHeart} from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
 
 function App() {
@@ -15,6 +14,7 @@ function App() {
   const[width,setWidth]=useState(window.innerWidth);
   const[location,setLocation]=useState("");
   const[weather,setWeather] = useState(null);
+  const[firstWeather,setFirstWeather] = useState(null);
   const[favorite,setFavorite] = useState([]);
   const[hideUI,setHideUI] = useState(false);
   const[isDragging,setIsDragging] = useState(false);
@@ -28,6 +28,37 @@ function App() {
 
 useEffect(()=>{
   window.addEventListener("resize",()=>{setWidth(window.innerWidth);})
+
+  navigator.geolocation.getCurrentPosition((position)=>{
+    // setLat(position.coords.latitude)
+    // setLon(position.coords.longitude)
+
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+    .then(res => res.json()).then(data=>{
+      const weatherData = {
+        location:data.name,
+        country:data.sys.country,
+        temp:data.main.temp,
+        feelsLike:data.main.feels_like,
+        tempMin:data.main.temp_min,
+        tempMax:data.main.temp_max,
+        pressure:data.main.pressure,
+        windSpeed:data.wind.speed,
+        windDegrees:data.wind.deg,
+        weatherCondition:data.weather[0].main,
+        weatherDescription:data.weather[0].description,
+        weatherIcon:"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+        longitude:data.coord.lon,
+        latitude:data.coord.lat,
+        id:data.name.concat(data.sys.country)
+      }
+      setFirstWeather(weatherData);
+
+    });
+
+    // console.log(position.coords.latitude)
+    // console.log(position.coords.longitude)
+  })
 
   let favWeather = JSON.parse(localStorage.getItem(Weather_Key));
   console.log(favWeather)
@@ -62,7 +93,7 @@ useEffect(()=>{
 },[])
 
 useEffect(() => {
-  if((carouselRef.current && outerRef.current && renderCount <= 70)){
+  if((carouselRef.current && outerRef.current && renderCount <= 50)){
     setScreenInfo({carouselWidth: carouselRef.current.scrollWidth  ,
                     outerWidth: outerRef.current.offsetWidth,
                     carouselHeight: carouselRef.current.scrollHeight,
@@ -84,6 +115,7 @@ useEffect(() => {
                   })
                   // console.log(carouselRef.current.scrollHeight,outerRef.current.offsetHeight)
   }
+  
 },[width,weather,favorite])
 
 
@@ -125,7 +157,7 @@ useEffect(() =>{
     .then(res => res.json()).then(data=>{
 
       const weatherData = {
-        location:location[0].toUpperCase().concat(location.slice(1,location.length).toLocaleLowerCase()),
+        location:location ? location[0].toUpperCase().concat(location.slice(1,location.length).toLocaleLowerCase()) : "",
         country:data.sys.country,
         temp:data.main.temp,
         feelsLike:data.main.feels_like,
@@ -316,6 +348,37 @@ useEffect(() =>{
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
   }
+  let element 
+
+  if(firstWeather && !hideUI){
+    element = (
+      <div className='info-container'>
+              <h1>{firstWeather.location},{firstWeather.country}</h1>
+              <hr/>
+              <h2>General Weather Information</h2>
+              <hr/>
+              <h4>Temperature: <span>{Math.round(firstWeather.temp).toString()} &#8451;</span></h4>
+              <h4>Feels Like: <span>{Math.round(firstWeather.feelsLike).toString()} &#8451;</span></h4>
+              <h4>Minimum Temperature: <span>{Math.round(firstWeather.tempMin).toString()} &#8451;</span></h4>
+              <h4>Maximum Temperature: <span>{Math.round(firstWeather.tempMax).toString()} &#8451;</span></h4>     
+              <h4>Pressure: <span>{Math.round(firstWeather.pressure).toString()} hPa</span></h4>
+              <hr/>
+              <h2>Wind Information</h2>
+              <hr/>
+              <h4>Wind Speed: <span>{Math.round(firstWeather.windSpeed).toString()} m/s</span></h4>
+              <h4>Wind Direction: <span>{Math.round(firstWeather.windDegrees).toString()} deg</span></h4>
+              <hr/>
+              <h2>Weather Condition</h2>
+              <hr/>
+              <h4><span>{firstWeather.weatherCondition} </span></h4>
+              <h4><span>{firstWeather.weatherDescription}</span></h4>
+              <img src={firstWeather.weatherIcon} alt="" />
+              <hr/>
+              <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color={favorite.length>=10 ? "darkgrey" : '#f5aa1f'} className={playAnim?'animate__animated animate__tada':""}/></button>
+            </div>
+      )
+  }
+
   return (
     <motion.div className="App" initial="hidden" animate="visible" variants={variants}>
     <h1 className='title'><FontAwesomeIcon icon={faCloudSun} color={'#f5aa1f'}/> Weather App </h1>
@@ -325,12 +388,13 @@ useEffect(() =>{
       <button type='submit' id='submit'>Submit</button>
     </form>
       {(favorite.length>0 && !hideUI) &&       
-         <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"}>
+         <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"} style={{marginBottom:"25px"}}>
            <div ref={carouselRef} className="flex-dir" style={style}>
             {fav}
            </div>
          </div>
        }
+      {element}
       {location.length>0 && weatherElements()}
     </motion.div>
   );
