@@ -56,12 +56,10 @@ useEffect(()=>{
 
     });
 
-    // console.log(position.coords.latitude)
-    // console.log(position.coords.longitude)
   })
 
   let favWeather = JSON.parse(localStorage.getItem(Weather_Key));
-  console.log(favWeather)
+
   if(favWeather.length>0){
     favWeather.map((fav)=>{
        fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
