@@ -6,6 +6,7 @@ import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudSun, faHeart} from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
+import WeatherCard from './components/WeatherCard';
 
 function App() {
 
@@ -30,9 +31,6 @@ useEffect(()=>{
   window.addEventListener("resize",()=>{setWidth(window.innerWidth);})
 
   navigator.geolocation.getCurrentPosition((position)=>{
-    // setLat(position.coords.latitude)
-    // setLon(position.coords.longitude)
-
     fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
     .then(res => res.json()).then(data=>{
       const weatherData = {
@@ -53,9 +51,7 @@ useEffect(()=>{
         id:data.name.concat(data.sys.country)
       }
       setFirstWeather(weatherData);
-
     });
-
   })
 
   let favWeather = JSON.parse(localStorage.getItem(Weather_Key));
@@ -111,11 +107,10 @@ useEffect(() => {
                     carouselHeight: carouselRef.current.scrollHeight,
                     outerHeight: outerRef.current.offsetHeight
                   })
-                  // console.log(carouselRef.current.scrollHeight,outerRef.current.offsetHeight)
+                  
   }
   
 },[width,weather,favorite])
-
 
 useEffect(() =>{
   if(location.length>0){
@@ -135,7 +130,7 @@ useEffect(() =>{
                           carouselHeight: carouselRef.current.scrollHeight,
                           outerHeight: outerRef.current.offsetHeight
                         })
-                        // console.log(carouselRef.current.scrollHeight,outerRef.current.offsetHeight)
+                        
         }  
       }
     );
@@ -239,10 +234,8 @@ useEffect(() =>{
   }
 
   function addToFavorites(){
-    if(favorite.length>=10){
-      //alert("maximum 10 favorites are allowed")
-      return
-    }
+    if(favorite.length>=10) return
+
     setFavorite(prevFav=>{         
       let arr = [...prevFav,weather]
       let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
@@ -272,11 +265,12 @@ useEffect(() =>{
             />
   })
   function weatherElements(){
+
     const variants = {
       hidden: { scale: 0.75 },
       visible: { scale: 1 },
     }
-    
+
     const style={
       transform: (hideUI&&screenInfo) ?( width > 900 ? `translateY(${((screenInfo.carouselHeight-screenInfo.outerHeight)/2)+15}px)` : `translateX(${((screenInfo.carouselWidth-screenInfo.outerWidth)/2)+15}px)`):"",
       paddingBottom: (hideUI && width > 900) ?   "15px" :"",
@@ -297,30 +291,25 @@ useEffect(() =>{
               </div>
             </div>
         }
-        <motion.div className='info-container' initial="hidden" animate="visible" variants={variants}>
-          <h1>{weather.location},{weather.country}</h1>
-          <hr/>
-          <h2>General Weather Information</h2>
-          <hr/>
-          <h4>Temperature: <span>{Math.round(weather.temp).toString()} &#8451;</span></h4>
-          <h4>Feels Like: <span>{Math.round(weather.feelsLike).toString()} &#8451;</span></h4>
-          <h4>Minimum Temperature: <span>{Math.round(weather.tempMin).toString()} &#8451;</span></h4>
-          <h4>Maximum Temperature: <span>{Math.round(weather.tempMax).toString()} &#8451;</span></h4>     
-          <h4>Pressure: <span>{Math.round(weather.pressure).toString()} hPa</span></h4>
-          <hr/>
-          <h2>Wind Information</h2>
-          <hr/>
-          <h4>Wind Speed: <span>{Math.round(weather.windSpeed).toString()} m/s</span></h4>
-          <h4>Wind Direction: <span>{Math.round(weather.windDegrees).toString()} deg</span></h4>
-          <hr/>
-          <h2>Weather Condition</h2>
-          <hr/>
-          <h4><span>{weather.weatherCondition} </span></h4>
-          <h4><span>{weather.weatherDescription}</span></h4>
-          <img src={weather.weatherIcon} alt="" />
-          <hr/>
-          <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color={favorite.length>=10 ? "darkgrey" : '#f5aa1f'} className={playAnim?'animate__animated animate__tada':""}/></button>
-        </motion.div>
+        <WeatherCard
+          location={weather.location} 
+          country={weather.country} 
+          temp={weather.temp} 
+          feelsLike={weather.feelsLike}
+          tempMin={weather.tempMin}
+          tempMax={weather.tempMax}
+          pressure={weather.pressure}
+          windSpeed={weather.windSpeed}
+          windDegrees={weather.windDegrees}
+          weatherCondition={weather.weatherCondition}
+          weatherDescription={weather.weatherDescription}
+          weatherIcon={weather.weatherIcon}
+          addToFavorites={addToFavorites}
+          playAnim={playAnim}
+          favorite={favorite}
+          variants={variants}
+        />
+
       </div>
      )
     : 
@@ -350,31 +339,25 @@ useEffect(() =>{
 
   if(firstWeather && !hideUI){
     element = (
-      <div className='info-container'>
-              <h1>{firstWeather.location},{firstWeather.country}</h1>
-              <hr/>
-              <h2>General Weather Information</h2>
-              <hr/>
-              <h4>Temperature: <span>{Math.round(firstWeather.temp).toString()} &#8451;</span></h4>
-              <h4>Feels Like: <span>{Math.round(firstWeather.feelsLike).toString()} &#8451;</span></h4>
-              <h4>Minimum Temperature: <span>{Math.round(firstWeather.tempMin).toString()} &#8451;</span></h4>
-              <h4>Maximum Temperature: <span>{Math.round(firstWeather.tempMax).toString()} &#8451;</span></h4>     
-              <h4>Pressure: <span>{Math.round(firstWeather.pressure).toString()} hPa</span></h4>
-              <hr/>
-              <h2>Wind Information</h2>
-              <hr/>
-              <h4>Wind Speed: <span>{Math.round(firstWeather.windSpeed).toString()} m/s</span></h4>
-              <h4>Wind Direction: <span>{Math.round(firstWeather.windDegrees).toString()} deg</span></h4>
-              <hr/>
-              <h2>Weather Condition</h2>
-              <hr/>
-              <h4><span>{firstWeather.weatherCondition} </span></h4>
-              <h4><span>{firstWeather.weatherDescription}</span></h4>
-              <img src={firstWeather.weatherIcon} alt="" />
-              <hr/>
-              <button className='add-fav-button' onClick={addToFavorites}><FontAwesomeIcon icon={faHeart} size="2x" color={favorite.length>=10 ? "darkgrey" : '#f5aa1f'} className={playAnim?'animate__animated animate__tada':""}/></button>
-            </div>
-      )
+      <WeatherCard
+        location={firstWeather.location} 
+        country={firstWeather.country} 
+        temp={firstWeather.temp} 
+        feelsLike={firstWeather.feelsLike}
+        tempMin={firstWeather.tempMin}
+        tempMax={firstWeather.tempMax}
+        pressure={firstWeather.pressure}
+        windSpeed={firstWeather.windSpeed}
+        windDegrees={firstWeather.windDegrees}
+        weatherCondition={firstWeather.weatherCondition}
+        weatherDescription={firstWeather.weatherDescription}
+        weatherIcon={firstWeather.weatherIcon}
+        addToFavorites={addToFavorites}
+        playAnim={playAnim}
+        favorite={favorite}
+        variants={variants}
+      />
+    )
   }
 
   return (
