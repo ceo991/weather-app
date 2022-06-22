@@ -31,7 +31,7 @@ useEffect(()=>{
   window.addEventListener("resize",()=>{setWidth(window.innerWidth);})
 
   navigator.geolocation.getCurrentPosition((position)=>{
-    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
     .then(res => res.json()).then(data=>{
       const weatherData = {
         location:data.name,
@@ -45,7 +45,7 @@ useEffect(()=>{
         windDegrees:data.wind.deg,
         weatherCondition:data.weather[0].main,
         weatherDescription:data.weather[0].description,
-        weatherIcon:"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+        weatherIcon:"https://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
         longitude:data.coord.lon,
         latitude:data.coord.lat,
         id:data.name.concat(data.sys.country)
@@ -58,14 +58,14 @@ useEffect(()=>{
 
   if(favWeather && favWeather.length>0){
     favWeather.map((fav)=>{
-       fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+       fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
         .then( res => res.json()).then(data=>{
 
           const weatherData = {
             location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
             temp:data.main.temp,
             weatherCondition:data.weather[0].main,
-            weatherIcon:"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+            weatherIcon:"https://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
             longitude:data.coord.lon,
             latitude:data.coord.lat,
             id:data.name.concat(data.sys.country)
@@ -114,7 +114,7 @@ useEffect(() => {
 
 useEffect(() =>{
   if(location.length>0){
-    fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+    fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=7d2e6b6e789a35974f922c6c41c0d301`)
     .then(res => res.json()).then(data=>{
       setLat(data[0].lat);
       setLon(data[0].lon);
@@ -150,7 +150,7 @@ useEffect(() =>{
 useEffect(() =>{
   if(location.length>0){
     setWeather(null)
-    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
     .then(res => res.json()).then(data=>{
 
       const weatherData = {
@@ -182,13 +182,13 @@ useEffect(() =>{
     if(favorite.length>0){
       favorite.map((fav)=>{
   
-          fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
           .then(res => res.json()).then(data=>{
             const weatherData = {
               location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
               temp:data.main.temp,
               weatherCondition:data.weather[0].main,
-              weatherIcon:"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+              weatherIcon:"https://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
               longitude:data.coord.lon,
               latitude:data.coord.lat,
               id:data.name.concat(data.sys.country)
@@ -214,13 +214,13 @@ useEffect(() =>{
       
       favorite.map((fav)=>{
   
-          fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
+          fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
           .then(res => res.json()).then(data=>{
             const weatherData = {
               location:fav.location[0].toUpperCase().concat(fav.location.slice(1,fav.location.length).toLocaleLowerCase()),
               temp:data.main.temp,
               weatherCondition:data.weather[0].main,
-              weatherIcon:"http://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
+              weatherIcon:"https://openweathermap.org/img/w/" + data.weather[0].icon + ".png",
               longitude:data.coord.lon,
               latitude:data.coord.lat,
               id:data.name.concat(data.sys.country)
