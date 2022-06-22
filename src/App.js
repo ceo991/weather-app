@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React,{useState,useEffect,useRef} from 'react';
 import Favorite from './components/Favorite'
 import { motion } from "framer-motion"
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCloudSun, faHeart} from '@fortawesome/free-solid-svg-icons';
+import { faCloudSun} from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
 import WeatherCard from './components/WeatherCard';
 
@@ -20,7 +21,6 @@ function App() {
   const[hideUI,setHideUI] = useState(false);
   const[isDragging,setIsDragging] = useState(false);
   const[playAnim,setPlayAnim] = useState(false);
-  const[renderCount,setRenderCount] = useState(0);
   const[screenInfo,setScreenInfo] = useState({});
   const locationRef = useRef("");
   const carouselRef = useRef();
@@ -56,7 +56,7 @@ useEffect(()=>{
 
   let favWeather = JSON.parse(localStorage.getItem(Weather_Key));
 
-  if(favWeather.length>0){
+  if(favWeather && favWeather.length>0){
     favWeather.map((fav)=>{
        fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${fav.latitude}&lon=${fav.longitude}&units=metric&appid=7d2e6b6e789a35974f922c6c41c0d301`)
         .then( res => res.json()).then(data=>{
@@ -87,17 +87,17 @@ useEffect(()=>{
 },[])
 
 useEffect(() => {
-  if((carouselRef.current && outerRef.current && renderCount <= 50)){
+  if((carouselRef.current && outerRef.current)){
     setScreenInfo({carouselWidth: carouselRef.current.scrollWidth  ,
                     outerWidth: outerRef.current.offsetWidth,
                     carouselHeight: carouselRef.current.scrollHeight,
                     outerHeight: outerRef.current.offsetHeight
                   })
-    setRenderCount(prev => prev+1 )
   }else{
     return false
   }
-})
+
+},[width])
 
 useEffect(() => {
 
@@ -142,6 +142,10 @@ useEffect(() =>{
   localStorage.setItem(Weather_Key,JSON.stringify(favorite))
   
 },[favorite])
+
+useEffect(() =>{
+  console.log(firstWeather);
+},[firstWeather])
 
 useEffect(() =>{
   if(location.length>0){
@@ -247,6 +251,20 @@ useEffect(() =>{
     },3000)
   }
 
+  function addFirstWeatherToFavorites(){
+    if(favorite.length>=10) return
+
+    setFavorite(prevFav=>{         
+      let arr = [...prevFav,firstWeather]
+      let uniqArr=arr.reduce((map,obj)=>map.set(obj.id,obj),new Map()).values()
+      setPlayAnim(true)
+      return [...uniqArr]
+    });
+    setTimeout(()=>{
+      setPlayAnim(false)
+    },3000)
+  }
+
   function deleteFavorite(e,index){
     e.stopPropagation();
     let tempArr=[...favorite];
@@ -335,6 +353,7 @@ useEffect(() =>{
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
   }
+
   let element 
 
   if(firstWeather && !hideUI){
@@ -352,7 +371,7 @@ useEffect(() =>{
         weatherCondition={firstWeather.weatherCondition}
         weatherDescription={firstWeather.weatherDescription}
         weatherIcon={firstWeather.weatherIcon}
-        addToFavorites={addToFavorites}
+        addToFavorites={addFirstWeatherToFavorites}
         playAnim={playAnim}
         favorite={favorite}
         variants={variants}
