@@ -396,6 +396,7 @@ useEffect(() =>{
        }
       {element}
       {location.length>0 && weatherElements()}
+      <h4><a href='https://github.com/ceo991/weather-app' style={{color:"aliceblue",textDecoration: "none"}}>You can see the source code here</a></h4>
     </motion.div>
   );
 }
