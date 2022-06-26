@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudSun} from '@fortawesome/free-solid-svg-icons';
 import 'animate.css';
 import WeatherCard from './components/WeatherCard';
+import Form from './components/Form';
 
 function App() {
 
@@ -382,11 +383,11 @@ useEffect(() =>{
   return (
     <motion.div className="App" initial="hidden" animate="visible" variants={variants}>
     <h1 className='title'><FontAwesomeIcon icon={faCloudSun} color={'#f5aa1f'}/> Weather App </h1>
-    <form onSubmit={handleLocation} style={formStyle}>
-      <label htmlFor="location">Enter A Location : </label>
-      <input type="text" name="location" id="location" ref={locationRef} required />
-      <button type='submit' id='submit'>Submit</button>
-    </form>
+      <Form 
+      handleLocation={handleLocation}
+      locationRef={locationRef}
+      formStyle={formStyle}
+      />
       {(favorite.length>0 && !hideUI) &&       
          <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"} style={{marginBottom:"25px"}}>
            <div ref={carouselRef} className="flex-dir" style={style}>
