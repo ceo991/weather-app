@@ -384,9 +384,9 @@ useEffect(() =>{
     <motion.div className="App" initial="hidden" animate="visible" variants={variants}>
     <h1 className='title'><FontAwesomeIcon icon={faCloudSun} color={'#f5aa1f'}/> Weather App </h1>
       <Form 
-      handleLocation={handleLocation}
-      locationRef={locationRef}
-      formStyle={formStyle}
+        handleLocation={handleLocation}
+        locationRef={locationRef}
+        formStyle={formStyle}
       />
       {(favorite.length>0 && !hideUI) &&       
          <div ref={outerRef}  className={width <= 900 ? "fav-holder" :"fav-holder-nonused"} style={{marginBottom:"25px"}}>

@@ -1,9 +1,10 @@
-import { motion } from "framer-motion";
+
 import "./Favorite.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 function Weather({index,location,setFav,temp,icon,deleteFav}) {
+  
   return (
       <div className="favorite" onClick={() => setFav(index)}>
         <h1>{location}</h1>
